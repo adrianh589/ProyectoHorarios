@@ -43,6 +43,7 @@ class Hora {
             rangos.push(this.retornarHoras(hora1));
             hora1 = this.sumarMinutos(hora1, 1);
         }
+        rangos.push(this.retornarHoras(hora1));
         return rangos;
     }
 
@@ -63,8 +64,8 @@ class Hora {
     }
 
     /**
-     * Metodo que retorna unicamente las horas
-     * @param {Date} horas
+     * Metodo que retorna unicamente las horas en string
+     * @param {string} horas
      */
     retornarHoras = (horas) => this.addCero(horas.getHours())+":"+this.addCero(horas.getMinutes());
 
@@ -101,13 +102,6 @@ class Hora {
     }
 
     /**
-     * Verificar si las horas son iguales
-     * @param {Date} hora1 
-     * @param {Date} hora2 
-     */
-     esIgual = (hora1, hora2) => (hora1 == hora2) ? true : false;
-
-    /**
      * Verificar si la primera hora es menor que la segunda
      * @param {Date} hora1 
      * @param {Date} hora2 
@@ -120,20 +114,6 @@ class Hora {
      * @param {Date} hora2 
      */
      esMayor = (hora1, hora2) => (hora1 > hora2) ? true : false;
-     
-    /**
-     * Metodo que indica si la primera hora es igual o mayor a la segunda hora
-     * @param {Date} hora1 
-     * @param {Date} hora2 
-     */
-     esIgualOMayor = (hora1, hora2) => (hora1 >= hora2) ? true : false;
-
-    /**
-     * Metdo que indica si la primera hota es igual o menor a la segunda hora
-     * @param {Date} hora1 
-     * @param {Date} hora2 
-     */
-     esIgualOMenor = (hora1, hora2) => (hora1 <= hora2) ? true : false;
 
     /**
      * Metodo para sumar minutos
@@ -143,6 +123,72 @@ class Hora {
      sumarMinutos = (hora, minutos) => {
         hora.setMinutes(hora.getMinutes() + minutos);
         return hora;
+    }
+
+    /**
+     * Metodo para convertir en array la hora en string
+     * @param hora
+     * @returns {*|string[]}
+     */
+    convertirAarray(hora){
+        let array = hora.split(":");
+        array[0] = this.quitarCero(array[0]);
+        array[1] = this.quitarCero(array[1]);
+        return array;
+    }
+
+    /**
+     * Metodo para verificar cual es la hora menor actualmente
+     * @param {string} hora
+     * @param {string} horaAlmacenada
+     */
+    retornarHoraInicioHorario(horaInicioDia, horaAlmacenada){
+        try {
+
+            horaInicioDia = this.convertirADate(horaInicioDia);
+            horaAlmacenada = this.convertirADate(horaAlmacenada);
+
+
+            if (horaAlmacenada == "Invalid Date") {
+                return this.retornarHoras(horaInicioDia);
+            }
+
+            if(horaInicioDia < horaAlmacenada){
+                return this.retornarHoras(horaInicioDia);
+            }else{
+                return this.retornarHoras(horaAlmacenada);
+            }
+
+        }catch (e) {
+            console.log("Error detectado en retronar la hora")
+        }
+    }
+
+    /**
+     * Metodo para verificar cual es la hora mayor actualmente
+     * @param {string} hora
+     * @param {string} horaAlmacenada
+     */
+    retornarHoraFinalHorario(horaFinalDia, horaAlmacenada){
+        try {
+
+            horaFinalDia = this.convertirADate(horaFinalDia);
+            horaAlmacenada = this.convertirADate(horaAlmacenada);
+
+
+            if (horaAlmacenada == "Invalid Date") {
+                return this.retornarHoras(horaFinalDia);
+            }
+
+            if(horaFinalDia > horaAlmacenada){
+                return this.retornarHoras(horaFinalDia);
+            }else{
+                return this.retornarHoras(horaAlmacenada);
+            }
+
+        }catch (e) {
+            console.log("Error detectado en retronar la hora")
+        }
     }
 
 }

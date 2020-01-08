@@ -43,18 +43,7 @@ class Horario {
         return aux;
     }
 
-    /**
-     * Metodo para imprimir el tablero en la pagina
-     * @param {string[]} tablero 
-     */
-    mostrarHorario(tablero) {
-        for (let i = 0; i < tablero.length; i++) {
-            for (let j = 0; j < tablero[i].length; j++) {
-                document.body.innerHTML += tablero[i][j] + " ";
-            }
-            document.body.innerHTML += "<br>";
-        }
-    }
+
 
 
 }

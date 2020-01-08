@@ -132,7 +132,7 @@ class OperacionesMateria {
 
             //Comprobar que este dentro del rango del horario
             if (!hora.dentroDelRangoDelHorario(horaInicio, horaFinal, tablero)) {
-                document.body.innerHTML += "La materia " + materia.nombre + " no se puede meter porque no esta dentro del rango " + tablero[1][0] + " - " + tablero[tablero.length - 1][0];
+                document.getElementById("impresion").innerHTML = "La materia " + materia.nombre + " no se puede meter porque no esta dentro del rango " + tablero[1][0] + " - " + tablero[tablero.length - 1][0];
                 return true;
             }
 
