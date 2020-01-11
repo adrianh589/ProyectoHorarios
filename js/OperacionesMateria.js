@@ -6,6 +6,7 @@ class OperacionesMateria {
     }
 
     materiasRegistradas = [];
+    posiblesHorarios = [];
 
     /**
      * Metodo con Backtracking que genera los posibles horios con las materias deseadas
@@ -14,12 +15,15 @@ class OperacionesMateria {
      * @param {number} materiaElegida Materia a escoger (de cada grupo)
      * @param {Array} nrcs           Pila que guarda los nrc
      */
-    generarHorarioAcademico(tableroHorario, materiaElegida, nrcs) {
+    generarHorarioAcademico(tableroHorario, materiaElegida, nrcs, filtro) {
 
         if (materiaElegida == this.materiasRegistradas.length) {//Caso base
             //horario.mostrarHorario(tableroHorario);
-            this.imprimirTableroIndividual(tableroHorario);
-            document.getElementById("impresion").innerHTML += nrcs;
+            if(nrcs.length >= filtro && !this.horarioRepetido(tableroHorario)) {//Se meustra el horario si son las materias minimas que quiere el usuario y si no se repite un horario ya mostrado
+                this.posiblesHorarios.push(tableroHorario);
+                this.imprimirTableroIndividual(tableroHorario);
+                document.getElementById("impresion").innerHTML += "<div id='nrcs'> Introduzca estos NRCs para registrar este horario<br>"+nrcs+"</div>";
+            }
         } else {
             //******************iterar materia individualmente*******
             for (let subMateria = 0; subMateria < this.materiasRegistradas[materiaElegida].length; subMateria++) {
@@ -32,7 +36,7 @@ class OperacionesMateria {
                 }
 
                 //Recursividad
-                this.generarHorarioAcademico(tableroHorario.slice(), materiaElegida + 1, nrcs.slice());
+                this.generarHorarioAcademico(tableroHorario.slice(), materiaElegida + 1, nrcs.slice(), filtro);
 
                 //Limpiar la materia que introducimos
                 tableroHorario = this.limpiarUltimaMateria(tableroHorario, nuevaMateria.nombre);
@@ -193,6 +197,10 @@ class OperacionesMateria {
         document.getElementById("materias").innerHTML = result;
     }
 
+    /**
+     * Metodo para imprimir el tablero generado al intentar meter todas las materias
+     * @param tablero
+     */
     imprimirTableroIndividual(tablero) {
         let result = '';
 
@@ -207,9 +215,9 @@ class OperacionesMateria {
                 if(j === 0){result += '<tr>';}//al inicio de cada columna
                 if(j === 0 && i>0){result += '<td class="table-danger">' + tablero[i][j] + '</td>';}
                 else{result += '<td >' + tablero[i][j] + '</td>';}//para cada celda
-                if( j === j == tablero[j].length - 1){result += '</tr>';}//al final de cada columna cerramos
+                if( j == tablero[i].length - 1){result += '</tr>';}//al final de cada columna cerramos
                 if( i === tablero.length-1 && j === tablero[i].length-1  ){result+=' </tbody>';}//Fin del body
-                if (i === 0 && j === tablero[j].length - 1) {result += '</thead>'; }//fin cabecera
+                if (i === 0 && j === tablero[i].length - 1) {result += '</thead>'; }//fin cabecera
             }
         }
         result += '</table>';
@@ -217,5 +225,17 @@ class OperacionesMateria {
         document.getElementById("impresion").innerHTML += result;
     }
 
+    /**
+     *Metodo para verificar que no se repitan los horarios generados
+     * @param {string[]} tablero
+     */
+    horarioRepetido(tablero){
+        for (let i = 0; i < this.posiblesHorarios.length; i++) {
+            if(this.posiblesHorarios[i].toString() == tablero.toString()){
+                return true
+            }
+        }
+        return false;
+    }
 
 }

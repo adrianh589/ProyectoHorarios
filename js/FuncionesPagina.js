@@ -64,7 +64,7 @@ function agregarMateria() {
                 <label class="input-group-text" for="inputGroupSelect01">Dia 2</label>
             </div>
             <select class="custom-select" id="dia2${materiaID}">
-                <option selected value="ninguno">--Seleccione--</option>
+                <option selected value="">--Seleccione--</option>
                 <option value="lunes">Lunes</option>
                 <option value="martes">Martes</option>
                 <option value="miercoles">Miercoles</option>
@@ -183,6 +183,7 @@ function inscribirMaterias() {
     if (bandera == true) {//Verificar que se hayan llenado los campos requeridos
         let horaInicioHorario = "";
         let horaFinalHorario = "";
+        let filtroMaterias = parseInt(document.getElementById('filtro').value);
         //Creacion de la materia****************************************************************************************
         for (let i = 0; i < IDS.length; i++) {
             let materia = new Materia();
@@ -201,7 +202,7 @@ function inscribirMaterias() {
 
 
             let nombreDiaM2 = document.getElementById("dia2" + IDS[i]).value;
-            if (nombreDiaM2 != "ninguno") {
+
                 let horaInicioDia2 = document.getElementById("horaInicioDia2" + IDS[i]).value;
 
                 horaInicioHorario = hora.retornarHoraInicioHorario(horaInicioDia2, horaInicioHorario);//Verificar que sea la hora menor
@@ -211,7 +212,7 @@ function inscribirMaterias() {
                 horaFinalHorario = hora.retornarHoraFinalHorario(horaFinalDia2, horaFinalHorario);//Verificar que sea la hora mayor
 
                 materia.dia.push(new Dia(nombreDiaM2, h.convertirADate(horaInicioDia2), h.convertirADate(horaFinalDia2)));
-            }
+
 
             materia.nrc = document.getElementById("nrc" + IDS[i]).value;
             op.guardarMateria(materia);
@@ -222,7 +223,7 @@ function inscribirMaterias() {
         //Generacion del tablero academico
         let tableroHorarioF = horario.tableroHorario(hora.convertirAarray(horaInicioHorario), hora.convertirAarray(horaFinalHorario));
         //Generar horario academico
-        op.generarHorarioAcademico(tableroHorarioF, 0, []);
+        op.generarHorarioAcademico(tableroHorarioF, 0, [], filtroMaterias);
     }
 }
 
@@ -234,23 +235,55 @@ function inscribirMaterias() {
 function validarCampos() {
     for (let i = 0; i < IDS.length; i++) {
         let name = document.getElementById("textoMateria" + IDS[i]).value;
-        let nombreDiaM = document.getElementById("dia1" + IDS[i]).value;
+        let nombreDia1 = document.getElementById("dia1" + IDS[i]).value;
         let horaInicioDia1 = document.getElementById("horaInicioDia1" + IDS[i]).value;
         let horaFinalDia1 = document.getElementById("horaFinalDia1" + IDS[i]).value;
+        let nombreDia2 = document.getElementById("dia2" + IDS[i]).value;
+        let horaInicioDia2 = document.getElementById("horaInicioDia2" + IDS[i]).value;
+        let horaFinalDia2 = document.getElementById("horaFinalDia2" + IDS[i]).value;
         let nrc = document.getElementById("nrc" + IDS[i]).value;
 
-        if (name == "" || nombreDiaM == "" || horaInicioDia1 == "" || horaFinalDia1 == "" || nrc == "") {
+
             if (name == "") {
-                alert('Falta llenar el nombre de la materia en la tarjeta ' + (i + 1))
-            } else if (nombreDiaM == "") {
-                alert('Falta llenar el dia en la tarjeta ' + (i + 1))
-            } else if (horaInicioDia1 == "") {
-                alert('Falta llenar la hora de inicio en la tarjeta ' + (i + 1))
-            } else {
-                alert('Falta llenar la hora final en la tarjeta ' + (i + 1))
+                alert('Falta llenar el nombre de la materia en la tarjeta ' + (i + 1));
+                return false;
             }
-            return false;
-        }
+
+            if (nombreDia1 == "") {
+                alert('Falta llenar el dia en la tarjeta ' + (i + 1));
+                return false;
+            }
+
+            if (horaInicioDia1 == "") {
+                alert('Falta llenar la hora de inicio del dia '+nombreDia1+' en la tarjeta ' + (i + 1));
+                return false;
+            }
+
+            if(horaFinalDia1 ==""){
+                alert('Falta llenar la hora final del dia '+nombreDia1+' en la tarjeta ' + (i + 1));
+                return false;
+            }
+
+            if(hora.convertirADate(horaInicioDia1) > hora.convertirADate(horaFinalDia1)){
+                alert('La hora inicial del dia '+nombreDia1+' no puede ser inferior que la hora final en la tarjeta '+(i+1))
+            }
+
+            if(nombreDia2 != ""){
+                if(horaInicioDia2 == "" || horaFinalDia2 == ""){
+                    alert("falta ingresar horas del dia "+nombreDia2+" en la tarjeta "+ (i+1));
+                    return false;
+                }
+
+                else if(hora.convertirADate(horaInicioDia2) > hora.convertirADate(horaFinalDia2)){
+                    alert('La hora inicial del dia '+nombreDia2+' no puede ser inferior que la hora final en la tarjeta '+(i+1))
+                }
+            }
+
+            if(nrc == ""){
+                alert("falta llenar el nrc en la tarjeta "+ (i+1));
+                return false;
+            }
+
     }
     return true;
 }
