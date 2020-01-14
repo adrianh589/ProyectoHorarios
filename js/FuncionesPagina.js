@@ -178,6 +178,7 @@ function eliminarMateria(id) {
  */
 function inscribirMaterias() {
     op.materiasRegistradas = [];//Borramos las materias que ya tenia
+    op.posiblesHorarios = []; //Borramos los horarios que ya tenia
     document.getElementById('impresion').innerHTML = "";//Se elimina los horarios que ya ha generado para evitar ver el mismo horario
     let bandera = validarCampos();
     if (bandera == true) {//Verificar que se hayan llenado los campos requeridos

@@ -5,6 +5,7 @@ class OperacionesMateria {
 
     }
 
+    //Variable que almacena las materias de las tarjetas
     materiasRegistradas = [];
     posiblesHorarios = [];
 
@@ -13,36 +14,75 @@ class OperacionesMateria {
      *
      * @param {string[]} tableroHorario Tablero academico
      * @param {number} materiaElegida Materia a escoger (de cada grupo)
-     * @param {Array} nrcs           Pila que guarda los nrc
+     * @param {Array} arrayMaterias
      */
-    generarHorarioAcademico(tableroHorario, materiaElegida, nrcs, filtro) {
+    generarHorarioAcademico(tableroHorario, materiaElegida, arrayMaterias, filtro) {
 
-        if (materiaElegida == this.materiasRegistradas.length) {//Caso base
-            //horario.mostrarHorario(tableroHorario);
-            if(nrcs.length >= filtro && !this.horarioRepetido(tableroHorario)) {//Se meustra el horario si son las materias minimas que quiere el usuario y si no se repite un horario ya mostrado
-                this.posiblesHorarios.push(tableroHorario);
-                this.imprimirTableroIndividual(tableroHorario);
-                document.getElementById("impresion").innerHTML += "<div id='nrcs'> Introduzca estos NRCs para registrar este horario<br>"+nrcs+"</div>";
-            }
-        } else {
-            //******************iterar materia individualmente*******
-            for (let subMateria = 0; subMateria < this.materiasRegistradas[materiaElegida].length; subMateria++) {
-                //obtener materia individualmente
-                let nuevaMateria = this.materiasRegistradas[materiaElegida][subMateria];
-                //introducir materia segun el dia
-                let asignar = this.introducirMateriaDiaActual(tableroHorario, nuevaMateria);
+        if(materiaElegida == this.materiasRegistradas.length){//Caso base
+
+            let asignar = false;
+            let nrcs = [];
+
+            //***********************************************LOGICA ASTRAL**********************************************
+            for (let i = 0; i < arrayMaterias.length; i++) {//iterar sobre la materia a elegirle los horarios
+
+                asignar = this.introducirMateriaDiaActual(tableroHorario, arrayMaterias[i]);//meter la materia en i
                 if (asignar == true) {//Meterlo en la pila de nrcs
-                    nrcs.push(nuevaMateria.nombre + ": " + nuevaMateria.nrc);
+                    nrcs.push(arrayMaterias[i].nombre + ": " + arrayMaterias[i].nrc);
                 }
 
-                //Recursividad
-                this.generarHorarioAcademico(tableroHorario.slice(), materiaElegida + 1, nrcs.slice(), filtro);
-
-                //Limpiar la materia que introducimos
-                tableroHorario = this.limpiarUltimaMateria(tableroHorario, nuevaMateria.nombre);
-                if (!nrcs.length == 0 && asignar == true) {
-                    nrcs.pop();
+                for (let j = 0; j < arrayMaterias.length; j++) {//iterar sobre las materias que van a legirse a la escogida
+                    if( i !== j ){
+                        asignar = this.introducirMateriaDiaActual(tableroHorario, arrayMaterias[j]);//meter la materia en j
+                        if (asignar == true) {//Meterlo en la pila de nrcs
+                            nrcs.push(arrayMaterias[j].nombre + ": " + arrayMaterias[j].nrc);
+                        }
+                    }
                 }
+
+                if( this.horarioRepetido(tableroHorario) === false && nrcs.length >= filtro){//Si no esta repetido, se imprime
+                    this.imprimirTableroIndividual(tableroHorario);
+                    document.getElementById("impresion").innerHTML += "<div id='nrcs'> Introduzca estos NRCs para registrar este horario<br>"+nrcs+"</div>";
+                }
+
+                this.posiblesHorarios.push(this.copiarArray(tableroHorario));//metemos el horario como posible horario a inscribir
+
+                this.limpiarHorario(tableroHorario);//limpiamos el tablero
+
+                nrcs = [];//limpiar la pila de nrcs
+            }
+         //*************************************FIN LOGICA ASTRAL ******************************************************
+        }else{
+            for (let subMateria = 0; subMateria < this.materiasRegistradas[materiaElegida].length; subMateria++) {
+                let materia = this.materiasRegistradas[materiaElegida][subMateria];
+                arrayMaterias.push(materia);
+                this.generarHorarioAcademico(tableroHorario, materiaElegida+1, arrayMaterias.slice(), filtro);
+                arrayMaterias.pop();
+            }
+        }
+    }
+
+    /**
+     * Metodo para clonar una matriz
+     * @param tablero
+     * @returns {[]}
+     */
+    copiarArray(tablero){
+        let newArray = [];
+        for (let i = 0; i < tablero.length; i++) {
+            newArray[i] = tablero[i].slice();
+        }
+        return newArray;
+    }
+
+    /**
+     *
+     * @param {string[]} tableroHorario
+     */
+    limpiarHorario(tableroHorario){
+        for (let i = 1; i < tableroHorario.length; i++) {
+            for (let j = 1; j < tableroHorario[i].length; j++) {
+                tableroHorario[i][j] = "*";
             }
         }
     }
@@ -84,6 +124,8 @@ class OperacionesMateria {
         }
         return aux;
     }
+
+
 
     /**
      * Metodo para introducir una materia en el dia correspondiente
@@ -231,8 +273,8 @@ class OperacionesMateria {
      */
     horarioRepetido(tablero){
         for (let i = 0; i < this.posiblesHorarios.length; i++) {
-            if(this.posiblesHorarios[i].toString() == tablero.toString()){
-                return true
+            if(JSON.stringify(this.posiblesHorarios[i]) === JSON.stringify(tablero)){
+                return true;
             }
         }
         return false;
