@@ -10,28 +10,37 @@
 </head>
 <body>
 
-<div id="titulo">
-    <h1 id="titulo-interno">Generador de Horarios</h1>
-</div>
+<nav class="navbar navbar-dark bg-dark">
+    <span class="navbar-brand mb-0 h1">Generador de Horarios</span>
+</nav>
 
 <div class="input-group input-group-sm mb-3">
     <div class="input-group-prepend">
         <span class="input-group-text" id="inputGroup-sizing-sm">Minimo de materias a mostrar</span>
     </div>
-    <input type="number" id="filtro" class="form-control" aria-label="Sizing example input" aria-describedby="inputGroup-sizing-sm" value="0">
+    <input type="number" id="filtro" class="form-control" aria-label="Sizing example input"
+           aria-describedby="inputGroup-sizing-sm" value="0">
 </div>
 
-<div id="tarjetas"></div>
+<div id="wave-background">
 
-<button type="button" class="btn btn-success" id="agregador" onclick="agregarMateria()">Agregar Materia</button>
+    <div style="height: 150px; overflow: hidden;" ><svg viewBox="0 0 500 150" preserveAspectRatio="none" style="height: 100%; width: 100%;"><path d="M0.00,49.98 C257.05,138.66 296.56,-25.14 537.52,33.06 L517.77,-155.41 L0.00,0.00 Z" style="stroke: none; fill: #08f;"></path></svg></div>
 
-<button type="button" id="Bhorario" onclick="inscribirMaterias()" class="btn btn-outline-danger">Generar Horario
-    Academico
-</button>
+    <div id="tarjetas"></div>
 
-<div id="impresion"></div>
+    <button type="button" class="btn btn-primary btn-floating" onclick="agregarMateria()">+</button>
 
-</body>
+    <button type="button" id="Bhorario" onclick="inscribirMaterias()" class="btn btn-outline-danger btn-generate">
+        Generar Horario Academico
+    </button>
+
+
+    <div id="impresion"></div>
+</div>
+
+
+
+
 
 <!-- Clases del proyecto -->
 <script src="js/Materia.js"></script>

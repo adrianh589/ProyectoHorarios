@@ -1,6 +1,4 @@
-body{
-    background-image: linear-gradient(to bottom, #000bff, #6e009f, #600055, #390023, #000000);
-}
+
 #agregador{
     margin-top: 10%;
 }
@@ -35,4 +33,91 @@ table {
 #nrcs{
     background: white;
     margin: 1%;
+}
+
+/*Para el botón de agregar materia*/
+.btn-floating {
+    position: fixed;
+    bottom: 20px;
+    right: 20px;
+    z-index: 1000; /* Asegura que esté por encima de otros elementos */
+    border-radius: 50%;
+    width: 60px;
+    height: 60px;
+    font-size: 24px;
+    line-height: 40px;
+    text-align: center;
+    color: #fff;
+    background-color: #007bff;
+    border: none;
+    cursor: pointer;
+    box-shadow: 0px 0px 10px rgba(0, 0, 0, 0.5);
+    transition: background-color 0.3s;
+}
+
+.btn-floating:hover {
+    background-color: #0056b3; /* Cambia el color al pasar el ratón por encima */
+}
+
+/*Para el botón de generar horario*/
+.btn-generate {
+    position: fixed;
+    bottom: 20px; /* Distancia desde la parte inferior de la pantalla */
+    left: 20px; /* Distancia desde el lado izquierdo de la pantalla */
+    z-index: 1000;
+    width: auto;
+    font-size: 24px;
+    line-height: 40px;
+    text-align: center;
+    color: #fff;
+    background-color: #007bff;
+    border: none;
+    cursor: pointer;
+    box-shadow: 0px 0px 10px rgba(0, 0, 0, 0.5);
+    transition: background-color 0.3s;
+}
+
+.btn-generate:hover {
+    background-color: #0056b3;
+}
+
+section {
+    position: relative;
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    min-height: 400px;
+    padding-top: 100px;
+    background: #3c31dd;
+}
+
+.curve {
+    position: absolute;
+    height: 250px;
+    width: 100%;
+    bottom: 0;
+    text-align: center;
+}
+
+.curve::before {
+    content: '';
+    display: block;
+    position: absolute;
+    border-radius: 100% 50%;
+    width: 55%;
+    height: 100%;
+    transform: translate(85%, 60%);
+    background-color: hsl(216, 21%, 16%);
+}
+
+.curve::after {
+    content: '';
+    display: block;
+    position: absolute;
+    border-radius: 100% 50%;
+    width: 55%;
+    height: 100%;
+    background-color: #3c31dd;
+    transform: translate(-4%, 40%);
+    z-index: -1;
 }
